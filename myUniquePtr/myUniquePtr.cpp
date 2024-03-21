@@ -4,18 +4,17 @@
 template<class T>
 class SmartPtr {
 public:
-    SmartPtr(T ptr) {
+    SmartPtr(T* ptr) {
         _ptr = ptr;
-        ptr = nullptr;
-        // delete ptr;
+        // ptr = nullptr;
     }
     SmartPtr(const SmartPtr& otherPtr) = delete;
     SmartPtr& operator=(const SmartPtr& otherPtr) = delete;
 
-    SmartPtr& release()
+    T* release()
     {
         this->_ptr = nullptr;
-        return *this;
+        return this->_ptr;
     }
 
     T* operator->() const
@@ -28,33 +27,20 @@ public:
         return *_ptr;
     }
 
-    /*SmartPtr* operator->() const
-    {
-        return this;
-    }
-
-    /*SmartPtr& operator*() const
-    {
-        return *this;
-    }*/
-
     ~SmartPtr() {
-        delete _ptr;
+        delete this->_ptr;
     }
 
     template<class T>
     friend std::ostream& operator<<(std::ostream& left, const SmartPtr<T>& right);
 
-    template<class T>
-    friend std::ostream& operator<<(std::ostream& left, const SmartPtr<T>* right);
-
-    T getPtr() const
+    T* getPtr() const
     {
-        return _ptr;
+        return this->_ptr;
     }
 
 private:
-    T _ptr;
+    T* _ptr;
 };
 
 template<class T>
@@ -64,20 +50,25 @@ std::ostream& operator<<(std::ostream& left, const SmartPtr<T>& right)
     return left;
 }
 
-template<class T>
-std::ostream& operator<<(std::ostream& left, const SmartPtr<T>* right)
-{
-    left << *right;
-    return left;
-}
 
 int main()
 {
-    int arr[3]{ 1, 2, 3 };
-    SmartPtr<int*> smrtPtr(arr);
+    setlocale(LC_ALL, "Russian");
+    int* arr = new int(3);
+    for (int i = 0; i < 3; ++i)
+        arr[i] = i + 5;
+        
+    SmartPtr<int> smrtPtr(arr);
     std::cout << smrtPtr << std::endl;
-    //std::cout << *smrtPtr << std::endl;
-    smrtPtr.release();
+    std::cout << *smrtPtr << std::endl;
+    auto emptyPtr = smrtPtr.release();
     std::cout << smrtPtr << std::endl;
-    //std::cout << *smrtPtr << std::endl;
+    //std::cout << *smrtPtr << std::endl; // нельзя читать по адресу nullptr
+
+    // std::cout << "Изначальное значение указателя (адрес): " << smrtPtr << std::endl;
+    // std::cout << "Разыменованное значение: " << *smrtPtr << std::endl;
+    // auto emptyPtr = smrtPtr.release();
+    // std::cout << "Значение указателя (адрес) после вызова release(): " << smrtPtr << std::endl;
+
+    delete emptyPtr;
 }
