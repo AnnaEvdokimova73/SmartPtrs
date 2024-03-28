@@ -59,16 +59,16 @@ int main()
         arr[i] = i + 5;
         
     SmartPtr<int> smrtPtr(arr);
-    std::cout << smrtPtr << std::endl;
-    std::cout << *smrtPtr << std::endl;
-    auto emptyPtr = smrtPtr.release();
-    std::cout << smrtPtr << std::endl;
+    ///std::cout << smrtPtr << std::endl;
+    //std::cout << *smrtPtr << std::endl;
+    //auto emptyPtr = smrtPtr.release();
+    //std::cout << smrtPtr << std::endl;
     //std::cout << *smrtPtr << std::endl; // нельзя читать по адресу nullptr
 
-    // std::cout << "Изначальное значение указателя (адрес): " << smrtPtr << std::endl;
-    // std::cout << "Разыменованное значение: " << *smrtPtr << std::endl;
-    // auto emptyPtr = smrtPtr.release();
-    // std::cout << "Значение указателя (адрес) после вызова release(): " << smrtPtr << std::endl;
+     std::cout << "Изначальное значение указателя (адрес): " << smrtPtr << std::endl;
+     std::cout << "Разыменованное значение: " << *smrtPtr << std::endl;
+     auto emptyPtr = smrtPtr.release();
+     std::cout << "Значение указателя (адрес) после вызова release(): " << smrtPtr << std::endl;
 
     delete emptyPtr;
 }
